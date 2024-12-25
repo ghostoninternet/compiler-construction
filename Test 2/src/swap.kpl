@@ -1,0 +1,14 @@
+Program SwapTest;
+
+Var a : Integer;
+Var b : Integer;
+
+Begin
+  a := 5;
+  b := 10;
+  a, b := b, a; (* Multiple assignment to swap values *)
+  Call WriteI(a); (* Should print 10 *)
+  Call WriteLn;
+  Call WriteI(b); (* Should print 5 *)
+  Call WriteLn;
+End.

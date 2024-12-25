@@ -1,5 +1,7 @@
 {
   "files.associations": {
-    "symtab.h": "c"
+    "symtab.h": "c",
+    "error.h": "c",
+    "semantics.h": "c"
   }
 }
