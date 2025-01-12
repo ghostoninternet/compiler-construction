@@ -56,25 +56,19 @@ void compileBlock(void) {
 
   if (lookAhead->tokenType == KW_CONST) {
     eat(KW_CONST);
-
     do {
       eat(TK_IDENT);
-      
       checkFreshIdent(currentToken->string);
       constObj = createConstantObject(currentToken->string);
-      
       eat(SB_EQ);
       constValue = compileConstant();
-      
       constObj->constAttrs->value = constValue;
       declareObject(constObj);
-      
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
 
     compileBlock2();
-  } 
-  else compileBlock2();
+  } else compileBlock2();
 }
 
 void compileBlock2(void) {
@@ -83,52 +77,40 @@ void compileBlock2(void) {
 
   if (lookAhead->tokenType == KW_TYPE) {
     eat(KW_TYPE);
-
     do {
       eat(TK_IDENT);
-      
       checkFreshIdent(currentToken->string);
       typeObj = createTypeObject(currentToken->string);
-      
       eat(SB_EQ);
       actualType = compileType();
-      
       typeObj->typeAttrs->actualType = actualType;
       declareObject(typeObj);
-      
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
 
     compileBlock3();
-  } 
-  else compileBlock3();
+  } else compileBlock3();
 }
 
 void compileBlock3(void) {
   Object* varObj;
   Type* varType;
 
-  if (lookAhead->tokenType == KW_VAR) {
+  while (lookAhead->tokenType == KW_VAR) {
     eat(KW_VAR);
-
     do {
       eat(TK_IDENT);
-      
       checkFreshIdent(currentToken->string);
       varObj = createVariableObject(currentToken->string);
-
       eat(SB_COLON);
       varType = compileType();
-      
       varObj->varAttrs->type = varType;
       declareObject(varObj);
-      
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
+  }
 
-    compileBlock4();
-  } 
-  else compileBlock4();
+  compileBlock4();
 }
 
 void compileBlock4(void) {
@@ -443,12 +425,18 @@ void compileMultipleAssignSt(void) {
 void compileStatement(void) {
   switch (lookAhead->tokenType) {
   case TK_IDENT:
-      if (lookAhead->tokenType == SB_ASSIGN || lookAhead->tokenType == SB_COMMA) {
-        compileMultipleAssignSt();
-      } else {
-        compileAssignSt();
-      }
-      break;
+    eat(TK_IDENT); // First consume the identifier
+    // Now check for multiple assignment or single assignment
+    if (lookAhead->tokenType == SB_COMMA) {
+      // Multiple assignment case
+      currentToken = lookAhead; // Reset current token to handle multiple assignments
+      compileMultipleAssignSt();
+    } else {
+      // Single assignment case
+      currentToken = lookAhead; // Reset for normal assignment
+      compileAssignSt(); 
+    }
+    break;
   case KW_CALL:
     compileCallSt();
     break;
@@ -464,12 +452,10 @@ void compileStatement(void) {
   case KW_FOR:
     compileForSt();
     break;
-    // EmptySt needs to check FOLLOW tokens
   case SB_SEMICOLON:
   case KW_END:
   case KW_ELSE:
     break;
-    // Error occurs
   default:
     error(ERR_INVALID_STATEMENT, lookAhead->lineNo, lookAhead->colNo);
     break;
