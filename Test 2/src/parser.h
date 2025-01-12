@@ -54,6 +54,7 @@ Type* compileTerm(void);
 void compileTerm2(void);
 Type* compileFactor(void);
 Type* compileIndexes(Type* arrayType);
+Type* compileSumExpression(void);
 
 int compile(char *fileName);
 

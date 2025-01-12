@@ -1,0 +1,10 @@
+Program SumExample;
+Var 
+  x : Integer;
+  y : Integer;
+  z : Integer;
+Begin
+  x := 5;
+  y := 10;
+  z := sum x, y, 20;  (* z will be 35 *)
+End.

@@ -31,7 +31,8 @@ struct {
   {"WHILE", KW_WHILE},
   {"DO", KW_DO},
   {"FOR", KW_FOR},
-  {"TO", KW_TO}
+  {"TO", KW_TO},
+  {"SUM", KW_SUM},
 };
 
 int keywordEq(char *kw, char *string) {

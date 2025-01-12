@@ -780,6 +780,10 @@ Type* compileFactor(void) {
     eat(TK_CHAR);
     type = charType;
     break;
+  case KW_SUM:
+      eat(KW_SUM);
+      type = compileSumExpression();
+      break;
   case TK_IDENT:
     eat(TK_IDENT);
     // check if the identifier is declared
@@ -815,6 +819,21 @@ Type* compileFactor(void) {
   }
   
   return type;
+}
+
+Type* compileSumExpression(void) {
+  Type* expType;
+  
+  expType = compileExpression();
+  checkIntType(expType);
+  
+  while (lookAhead->tokenType == SB_COMMA) {
+    eat(SB_COMMA);
+    expType = compileExpression();
+    checkIntType(expType);
+  }
+  
+  return intType;
 }
 
 Type* compileIndexes(Type* arrayType) {

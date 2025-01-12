@@ -111,7 +111,8 @@ Object* checkDeclaredLValueIdent(char* name) {
 
 
 void checkIntType(Type* type) {
-  // TODO
+  if (type->typeClass != TP_INT)
+    error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
 }
 
 void checkCharType(Type* type) {
